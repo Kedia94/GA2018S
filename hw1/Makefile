@@ -5,7 +5,7 @@ LDFLAGS =
 SRC_DIR = src
 OBJ_DIR = obj
 INCLUDE_DIR = include
-SRC_FILES = main.cpp graph.cpp
+SRC_FILES = main.cpp graph.cpp solution.cpp
 SRC = $(SRC_FILES:%=$(SRC_DIR)/%)
 OBJ = $(SRC_FILES:%.cpp=$(OBJ_DIR)/%.o)
 EXECUTABLE = hw1
