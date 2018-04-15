@@ -9,7 +9,6 @@
 #include "graph.h"
 #include "solution.h"
 
-#define PRINT_TIME
 #define GEN_SIZE 500
 #define MAX_GEN 1000
 #define MUTATE (1 << 8)
@@ -32,7 +31,7 @@ int main()
 #endif		
 
 	std::string line;
-	std::ifstream maxin ("weighted_500.txt");
+	std::ifstream maxin ("maxcut.in");
 
 	if (!maxin.is_open()){
 		std::cout << "There is no file: maxcut.in" << std::endl;
@@ -140,6 +139,7 @@ int main()
 		}
 	}
 
+	std::ofstream fw("maxcut.out");
 	int initial = 0;
 	for (int i=0; i<vertex; ++i)
 	{
@@ -148,13 +148,13 @@ int main()
 			if (initial == 0)
 			{
 				++initial;
-				std::cout<<(i+1);
+				fw<<(i+1);
 			}
 			else
-				std::cout<<" "<<(i+1);
+				fw<<" "<<(i+1);
 		}
 	}
-	std::cout<<std::endl;
+	fw.close();
 
 
 #ifdef PRINT_TIME
