@@ -1,0 +1,60 @@
+Result: 3203
+Spent: 14901.1 msecs
+Result: 3203
+Spent: 14385.2 msecs
+Result: 3228
+Spent: 14228.9 msecs
+Result: 3228
+Spent: 14761.3 msecs
+Result: 3204
+Spent: 14255.1 msecs
+Result: 3196
+Spent: 14393.1 msecs
+Result: 3238
+Spent: 14361.7 msecs
+Result: 3203
+Spent: 14401.6 msecs
+Result: 3210
+Spent: 14586.5 msecs
+Result: 3208
+Spent: 17152.7 msecs
+Result: 3201
+Spent: 14459.7 msecs
+Result: 3221
+Spent: 15230.1 msecs
+Result: 3214
+Spent: 18528.4 msecs
+Result: 3224
+Spent: 14181.7 msecs
+Result: 3223
+Spent: 14273.7 msecs
+Result: 3208
+Spent: 14292.1 msecs
+Result: 3236
+Spent: 14181.8 msecs
+Result: 3246
+Spent: 15699.8 msecs
+Result: 3239
+Spent: 14175.4 msecs
+Result: 3210
+Spent: 14541.5 msecs
+Result: 3213
+Spent: 14325.8 msecs
+Result: 3227
+Spent: 16760.9 msecs
+Result: 3202
+Spent: 14339.8 msecs
+Result: 3210
+Spent: 14468.9 msecs
+Result: 3199
+Spent: 14660.2 msecs
+Result: 3236
+Spent: 14204.8 msecs
+Result: 3242
+Spent: 14337.4 msecs
+Result: 3229
+Spent: 15278 msecs
+Result: 3237
+Spent: 14537.4 msecs
+Result: 3230
+Spent: 14309.6 msecs
