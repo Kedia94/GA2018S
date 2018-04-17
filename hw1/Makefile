@@ -16,6 +16,8 @@ $(EXECUTABLE): $(OBJ)
 $(OBJ): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp
 	$(CXX) -c -o $@ $^ $(LDFLAGS) $(CXXFLAGS)
 
+all: $(EXECUTABLE)
+
 clean:
 	rm -rf $(OBJ) $(EXECUTABLE)
 
