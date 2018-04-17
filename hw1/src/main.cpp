@@ -5,6 +5,7 @@
 #include <ctime>
 #include <algorithm>
 #include <vector>
+#include <limits.h>
 
 #include "graph.h"
 #include "solution.h"
@@ -13,6 +14,7 @@
 #define MAX_GEN 1000
 #define MUTATE (1 << 8)
 
+//#define PRINT_TIME
 #ifdef PRINT_TIME
 #include <sys/time.h>
 #endif
@@ -79,6 +81,7 @@ int main()
 	/* Part 2: Mix generation */
 	int first_max, max, max_i;
 	int max_new, max_new_i;
+	first_max = INT_MIN;
 	for (int i=0; i<MAX_GEN; ++i)
 	{
 		std::vector<Solution*> now_sol;
@@ -109,10 +112,16 @@ int main()
 			}
 		}
 
-		max = 0;
-		max_new = 0;
+		max = INT_MIN;
+		max_new = INT_MIN;
+#ifdef PRINT_TIME
+		int average = 0 ;
+#endif
 		for (int j=0; j<GEN_SIZE; ++j)
 		{
+#ifdef PRINT_TIME
+			average += now_sol[j]->getValue(graph);
+#endif
 			if (max_new < now_sol[j]->getValue(graph))
 			{
 				max_new = now_sol[j]->getValue(graph);
@@ -130,6 +139,9 @@ int main()
 		}
 		sol.clear();
 		sol.assign(now_sol.begin(), now_sol.end());
+#ifdef PRINT_TIME
+//			std::cout<<average/(float)GEN_SIZE << " "<<first_max <<" " <<max_new<<std::endl;
+#endif
 		if (i >= MAX_GEN/4)
 		{
 			if (first_max <= max_new)
