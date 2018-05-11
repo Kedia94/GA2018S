@@ -18,6 +18,7 @@ public:
 	int isInclude(int key);
 	void mutateKey(int key);
 	int getValue(Graph graph);
+	int getTempValue(Graph graph);
 	int getValue();
 	void print();
 

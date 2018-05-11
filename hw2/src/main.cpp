@@ -11,9 +11,9 @@
 #include "graph.h"
 #include "solution.h"
 
-#define REPEAT 10
-#define GEN_SIZE 500
-#define MAX_GEN 1000
+#define REPEAT 4
+#define GEN_SIZE 250
+#define MAX_GEN 50
 #define MUTATE (1 << 8)
 
 #define PRINT_TIME
@@ -75,12 +75,47 @@ int main()
 
 		std::vector<Solution*> sol;
 		int a[MAX_VERTEX];
+		int sigma[MAX_VERTEX];
 
+		/* random sigma function */
+		for (int i=0; i<vertex; ++i)
+		{
+			sigma[i] = i;
+		}
+
+		for (int i=0; i<vertex; ++i)
+		{
+			int temp = rand() % vertex;
+			int swap_temp = sigma[i];
+			sigma[i] = sigma[temp];
+			sigma[temp] = swap_temp;
+		}
 		for (int i=0; i<GEN_SIZE; ++i)
 		{
 			for (int j=0; j<vertex; ++j)
 				a[j] = rand()%2;
-			sol.push_back(new Solution(vertex, a));
+
+			Solution *temp_sol = new Solution(vertex, a);
+			int improved = 1;
+			while (improved)
+			{
+				improved = 0;
+				for (int j=0; j<vertex; ++j)
+				{
+					int before = temp_sol->getTempValue(graph);
+					temp_sol->mutateKey(sigma[j]);
+					if (temp_sol->getTempValue(graph) > before)
+					{
+						improved = 1;
+					}
+					else
+					{
+						/* restore */
+						temp_sol->mutateKey(sigma[j]);
+					}
+				}
+			}
+			sol.push_back(temp_sol);
 		}
 
 		int valueSum[MAX_VERTEX];
@@ -150,7 +185,7 @@ int main()
 #ifdef PRINT_TIME
 			//			std::cout<<average/(float)GEN_SIZE << " "<<first_max <<" " <<max_new<<std::endl;
 #endif
-			if (i >= MAX_GEN/4)
+			if (i>= MAX_GEN/2)
 			{
 				if (first_max <= max_new)
 				{
@@ -174,6 +209,11 @@ int main()
 					result_list[repeats] += " " + std::to_string(i+1);
 			}
 		}
+		for (int j=0; j<GEN_SIZE; ++j)
+		{
+			delete sol[j];
+		}
+		sol.clear();
 
 	}
 
@@ -194,10 +234,10 @@ int main()
 
 #ifdef PRINT_TIME
 	gettimeofday(&t2, NULL);
-	for (int i=0; i<REPEAT; i++)
-	{
-		std::cout<<"Result: "<< max_list[i] <<": "<<result_list[i]<<std::endl<<std::endl;;//sol[max_i]->getValue(graph)<<std::endl;
-	}
+//	for (int i=0; i<REPEAT; i++)
+//	{
+		std::cout<<"Result: "<<max<<std::endl;//<< max_list[i] <<": "<<result_list[i]<<std::endl<<std::endl;;//sol[max_i]->getValue(graph)<<std::endl;
+//	}
 	std::cout<<"Spent: "<<((t2.tv_sec-t1.tv_sec)*1000 + (t2.tv_usec-t1.tv_usec)*0.001f) <<" msecs"<<std::endl;
 
 #endif

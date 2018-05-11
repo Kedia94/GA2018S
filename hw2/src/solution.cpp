@@ -58,6 +58,21 @@ int Solution::getValue(Graph graph)
 	return _value;
 }
 
+int Solution::getTempValue(Graph graph)
+{
+	int value = 0;
+	int edgeNum = graph.getNumEdge();
+	
+	for (int i=0; i<edgeNum; ++i)
+	{
+		struct edge edg = graph.getEdge(i);
+		if (isInclude(edg.v1) + isInclude(edg.v2) == 1)
+			value += edg.weight;
+	}
+
+	return value;
+}
+
 int Solution::getValue()
 {
 	return _value;
