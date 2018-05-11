@@ -1,0 +1,60 @@
+Result: 99
+Spent: 1591.26 msecs
+Result: 99
+Spent: 1339.21 msecs
+Result: 96
+Spent: 1353.91 msecs
+Result: 98
+Spent: 1341.1 msecs
+Result: 98
+Spent: 1344.64 msecs
+Result: 97
+Spent: 1366.41 msecs
+Result: 99
+Spent: 1344.11 msecs
+Result: 97
+Spent: 1351.3 msecs
+Result: 99
+Spent: 1344.1 msecs
+Result: 98
+Spent: 1347.46 msecs
+Result: 91
+Spent: 1356.02 msecs
+Result: 98
+Spent: 1341.19 msecs
+Result: 98
+Spent: 1340.32 msecs
+Result: 98
+Spent: 1346.34 msecs
+Result: 96
+Spent: 1347.47 msecs
+Result: 99
+Spent: 1338.17 msecs
+Result: 97
+Spent: 1350.64 msecs
+Result: 96
+Spent: 1348.8 msecs
+Result: 95
+Spent: 1344 msecs
+Result: 99
+Spent: 1340.82 msecs
+Result: 98
+Spent: 1343.14 msecs
+Result: 94
+Spent: 1347.41 msecs
+Result: 99
+Spent: 1339.28 msecs
+Result: 94
+Spent: 1357.83 msecs
+Result: 98
+Spent: 1339.12 msecs
+Result: 93
+Spent: 1351.84 msecs
+Result: 96
+Spent: 1355.64 msecs
+Result: 98
+Spent: 1346.26 msecs
+Result: 93
+Spent: 1351.77 msecs
+Result: 99
+Spent: 1342.15 msecs
