@@ -12,8 +12,8 @@
 #include "solution.h"
 
 #define REPEAT 1
-#define GEN_SIZE 50
-#define MAX_GEN 50
+#define GEN_SIZE 250
+#define MAX_GEN 100
 #define MUTATE (1 << 8)
 
 #define PRINT_TIME
@@ -29,10 +29,8 @@ bool cmp(Solution *a, Solution *b)
 int main()
 {
 	std::srand(std::time(nullptr));
-#ifdef PRINT_TIME
 	struct timeval t1, t2;
 	gettimeofday(&t1, NULL);
-#endif		
 
 	std::string line;
 	std::ifstream maxin ("maxcut.in");
@@ -163,15 +161,8 @@ int main()
 			sol.clear();
 			sol.assign(now_sol.begin(), now_sol.end());
 #ifdef PRINT_TIME
-			//			std::cout<<average/(float)GEN_SIZE << " "<<first_max <<" " <<max_new<<std::endl;
+//						std::cout<<average/(float)GEN_SIZE << " "<<first_max <<" " <<max_new<<std::endl;
 #endif
-			if (i>= MAX_GEN/2)
-			{
-				if (first_max <= max_new)
-				{
-					break;
-				}
-			}
 		}
 
 
@@ -217,6 +208,9 @@ int main()
 		}
 		sol.clear();
 
+		gettimeofday(&t2, NULL);
+		if ((t2.tv_sec - t1.tv_sec) *(repeats+1) > 150 * repeats)
+			break;
 	}
 
 	int max_index = -1;
