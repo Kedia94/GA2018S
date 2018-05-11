@@ -161,31 +161,38 @@ int main()
 			sol.clear();
 			sol.assign(now_sol.begin(), now_sol.end());
 #ifdef PRINT_TIME
-//						std::cout<<average/(float)GEN_SIZE << " "<<first_max <<" " <<max_new<<std::endl;
+			//						std::cout<<average/(float)GEN_SIZE << " "<<first_max <<" " <<max_new<<std::endl;
 #endif
+			gettimeofday(&t2, NULL);
+			if (repeats == 0 && t2.tv_sec - t1.tv_sec > 90)
+				i += MAX_GEN; 
+			std::cout<<i<<" / "<<MAX_GEN<<" : "<<(t2.tv_sec - t1.tv_sec) <<" secs"<<std::endl;
 		}
 
 
-			Solution *temp_sol = sol[max_i];
-			int improved = 1;
-			while (improved)
+		Solution *temp_sol = sol[max_i];
+		int improved = 1;
+		while (improved)
+		{
+			improved = 0;
+			for (int j=0; j<vertex; ++j)
 			{
-				improved = 0;
-				for (int j=0; j<vertex; ++j)
+				int before = temp_sol->getValue(graph);
+				temp_sol->mutateKey(sigma[j], graph);
+				if (temp_sol->getValue(graph) > before)
 				{
-					int before = temp_sol->getValue(graph);
+					improved = 1;
+				}
+				else
+				{
+					/* restore */
 					temp_sol->mutateKey(sigma[j], graph);
-					if (temp_sol->getValue(graph) > before)
-					{
-						improved = 1;
-					}
-					else
-					{
-						/* restore */
-						temp_sol->mutateKey(sigma[j], graph);
-					}
 				}
 			}
+			gettimeofday(&t2, NULL);
+			if (repeats == 0 && t2.tv_sec - t1.tv_sec > 160)
+				break;
+		}
 		int initial = 0;
 		for (int i=0; i<vertex; ++i)
 		{
@@ -230,10 +237,10 @@ int main()
 
 #ifdef PRINT_TIME
 	gettimeofday(&t2, NULL);
-//	for (int i=0; i<REPEAT; i++)
-//	{
-		std::cout<<"Result: "<<max<<std::endl;//<< max_list[i] <<": "<<result_list[i]<<std::endl<<std::endl;;//sol[max_i]->getValue(graph)<<std::endl;
-//	}
+	//	for (int i=0; i<REPEAT; i++)
+	//	{
+	std::cout<<"Result: "<<max<<std::endl;//<< max_list[i] <<": "<<result_list[i]<<std::endl<<std::endl;;//sol[max_i]->getValue(graph)<<std::endl;
+	//	}
 	std::cout<<"Spent: "<<((t2.tv_sec-t1.tv_sec)*1000 + (t2.tv_usec-t1.tv_usec)*0.001f) <<" msecs"<<std::endl;
 
 #endif
