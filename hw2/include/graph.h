@@ -2,8 +2,9 @@
 #define _GRAPH_H_
 
 #include <map>
-#define MAX_VERTEX 500
-#define MAX_EDGE 5000
+#include <utility>
+#define MAX_VERTEX 1500
+#define MAX_EDGE 15000
 
 struct edge
 {
@@ -17,6 +18,7 @@ class Graph
 private:
 	int _numVertex, _numEdge;
 	struct edge _edge[MAX_EDGE];
+	std::map<std::pair<int, int>, struct edge> _edgemap;
 
 
 public:
@@ -26,6 +28,7 @@ public:
 	int getNumVertex();
 	int getNumEdge();
 	struct edge getEdge(int index);
+	struct edge getEdgeByIndex(int v1, int v2);
 };
 
 #endif

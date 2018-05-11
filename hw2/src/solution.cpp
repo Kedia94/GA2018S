@@ -34,9 +34,22 @@ int Solution::isInclude(int key)
 	return _exists[key];
 }
 
-void Solution::mutateKey(int key)
+void Solution::mutateKey(int key, Graph graph)
 {
+	if (!_calculated)
+		getValue(graph);
+
 	_exists[key] = 1 - _exists[key];
+
+	for (int i=0; i<_size; ++i)
+	{
+		if (i == key)
+			continue;
+		if (_exists[key] == _exists[i])
+			_value -= graph.getEdgeByIndex(i, key).weight;
+		else
+			_value += graph.getEdgeByIndex(i, key).weight;
+	}
 }
 
 int Solution::getValue(Graph graph)
@@ -47,7 +60,7 @@ int Solution::getValue(Graph graph)
 	_calculated = 1;
 
 	int edgeNum = graph.getNumEdge();
-	
+
 	for (int i=0; i<edgeNum; ++i)
 	{
 		struct edge edg = graph.getEdge(i);
@@ -56,21 +69,6 @@ int Solution::getValue(Graph graph)
 	}
 
 	return _value;
-}
-
-int Solution::getTempValue(Graph graph)
-{
-	int value = 0;
-	int edgeNum = graph.getNumEdge();
-	
-	for (int i=0; i<edgeNum; ++i)
-	{
-		struct edge edg = graph.getEdge(i);
-		if (isInclude(edg.v1) + isInclude(edg.v2) == 1)
-			value += edg.weight;
-	}
-
-	return value;
 }
 
 int Solution::getValue()

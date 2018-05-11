@@ -11,8 +11,8 @@
 #include "graph.h"
 #include "solution.h"
 
-#define REPEAT 4
-#define GEN_SIZE 250
+#define REPEAT 1
+#define GEN_SIZE 50
 #define MAX_GEN 50
 #define MUTATE (1 << 8)
 
@@ -95,27 +95,7 @@ int main()
 			for (int j=0; j<vertex; ++j)
 				a[j] = rand()%2;
 
-			Solution *temp_sol = new Solution(vertex, a);
-			int improved = 1;
-			while (improved)
-			{
-				improved = 0;
-				for (int j=0; j<vertex; ++j)
-				{
-					int before = temp_sol->getTempValue(graph);
-					temp_sol->mutateKey(sigma[j]);
-					if (temp_sol->getTempValue(graph) > before)
-					{
-						improved = 1;
-					}
-					else
-					{
-						/* restore */
-						temp_sol->mutateKey(sigma[j]);
-					}
-				}
-			}
-			sol.push_back(temp_sol);
+			sol.push_back(new Solution(vertex, a));
 		}
 
 		int valueSum[MAX_VERTEX];
@@ -150,7 +130,7 @@ int main()
 				{
 					if (rand() % MUTATE == 0)
 					{
-						now_sol[j]->mutateKey(k);
+						now_sol[j]->mutateKey(k, graph);
 					}
 				}
 			}
@@ -194,11 +174,31 @@ int main()
 			}
 		}
 
-		max_list[repeats] = sol[max_i]->getValue(graph);
+
+			Solution *temp_sol = sol[max_i];
+			int improved = 1;
+			while (improved)
+			{
+				improved = 0;
+				for (int j=0; j<vertex; ++j)
+				{
+					int before = temp_sol->getValue(graph);
+					temp_sol->mutateKey(sigma[j], graph);
+					if (temp_sol->getValue(graph) > before)
+					{
+						improved = 1;
+					}
+					else
+					{
+						/* restore */
+						temp_sol->mutateKey(sigma[j], graph);
+					}
+				}
+			}
 		int initial = 0;
 		for (int i=0; i<vertex; ++i)
 		{
-			if (sol[max_i]->isInclude(i) == 1)
+			if (temp_sol->isInclude(i) == 1)
 			{
 				if (initial == 0)
 				{
@@ -209,6 +209,8 @@ int main()
 					result_list[repeats] += " " + std::to_string(i+1);
 			}
 		}
+		max_list[repeats] = temp_sol->getValue(graph);
+
 		for (int j=0; j<GEN_SIZE; ++j)
 		{
 			delete sol[j];

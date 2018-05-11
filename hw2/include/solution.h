@@ -16,9 +16,8 @@ public:
 	Solution(int size, Solution* sol1, Solution* sol2, int *randarray);
 	~Solution();
 	int isInclude(int key);
-	void mutateKey(int key);
+	void mutateKey(int key, Graph graph);
 	int getValue(Graph graph);
-	int getTempValue(Graph graph);
 	int getValue();
 	void print();
 
