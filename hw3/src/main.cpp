@@ -13,7 +13,7 @@
 
 #define REPEAT 1
 #define GEN_SIZE 1000
-#define MAX_GEN 100
+#define MAX_GEN 1
 #define MUTATE (1 << 8)
 
 #define PRINT_TIME
@@ -187,43 +187,24 @@ int main()
 
 		struct timeval tt1, tt2;
 		long _count = 0;
+		long total_sum = 0;
 		Solution *temp_sol;
 		gettimeofday(&tt1, NULL);
 		int max_index_s = INT_MIN;
 		int max_value_s = INT_MIN;
 for (int ii=0; ii<GEN_SIZE;++ii)
 {
-		temp_sol = sol[ii];
-		int check_total = vertex + edge;
-		int improved = check_total;
-		int j=0;
-		while (improved)
+		sol[ii]->localOptimize(&graph, vertex, edge, sigma, edgeSigma);
+//		total_sum += sol[ii]->getValue(&graph);
+		if (max_value_s < sol[ii]->getValue(&graph))
 		{
-			j = (j+1) % check_total;
-			if (j < vertex && temp_sol->mutateKey(sigma[j], &graph) > 0)
-			{
-				temp_sol->flipKey(sigma[j]);
-				improved = check_total;
-			}
-			else if (j >= vertex && temp_sol->mutateEdge(edgeSigma[j-vertex], &graph) > 0)
-			{
-				temp_sol->flipEdge(edgeSigma[j-vertex], &graph);
-				improved = check_total;
-			}
-			else
-			{
-				--improved;
-			}
-		}
-		if (max_value_s < temp_sol->getValue(&graph))
-		{
-			max_value_s = temp_sol->getValue(&graph);
+			max_value_s = sol[ii]->getValue(&graph);
 			max_index_s = ii;
 		}
 
 }
 		gettimeofday(&tt2, NULL);
-		std::cout<<"Local Spent: "<<((tt2.tv_sec-tt1.tv_sec)*1000 + (tt2.tv_usec-tt1.tv_usec)*0.001f) <<" msecs "<<std::endl; //_count<<", avg: "<<total_sum/GEN_SIZE<<std::endl;
+		std::cout<<"Local Spent: "<<((tt2.tv_sec-tt1.tv_sec)*1000 + (tt2.tv_usec-tt1.tv_usec)*0.001f) <<" msecs "<<_count<<", avg: "<<total_sum/GEN_SIZE<<std::endl;
 
 		temp_sol = sol[max_index_s];
 

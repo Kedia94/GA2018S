@@ -24,6 +24,7 @@ public:
 	void flipEdge(int edgeNum, Graph* graph);
 	int getValue(Graph* graph);
 	int getValue();
+	void localOptimize(Graph* graph, int vertex, int edge, int *sigma, int *edgeSigma);
 	void print();
 
 	bool operator<(const Solution &a) const {

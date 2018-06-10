@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -I$(INCLUDE_DIR)
+CXXFLAGS = -std=c++11 -I$(INCLUDE_DIR) -Ofast
 LDFLAGS = 
 
 SRC_DIR = src

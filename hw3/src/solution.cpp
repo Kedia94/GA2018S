@@ -39,7 +39,7 @@ int Solution::mutateKey(int key, Graph* graph)
 
 	int state = 1 - _exists[key];
 	int index;
-	struct edge_other *tempEdges = (struct edge_other *)graph->getEdgesByVertex(key, &index);
+	struct edge_other *tempEdges = graph->getEdgesByVertex(key, &index);
 	for (int i=0; i<index; ++i)
 	{
 		struct edge_other* tempEdge = tempEdges+i;
@@ -100,6 +100,30 @@ int Solution::getValue(Graph* graph)
 int Solution::getValue()
 {
 	return _value;
+}
+
+void Solution::localOptimize(Graph* graph, int vertex, int edge, int* sigma, int* edgeSigma)
+{
+	int check_total = vertex + edge;
+	int improved = check_total;
+	int j=0, jj;
+	while (improved)
+	{
+		--improved;
+		j = (j+1) % check_total;
+		jj = j - vertex;
+		if (j<vertex && mutateKey(sigma[j], graph) > 0)
+		{
+			flipKey(sigma[j]);
+			improved = check_total;
+		}
+		else if (jj>=0 && mutateEdge(edgeSigma[jj], graph) > 0)
+		{
+			flipEdge(edgeSigma[jj], graph);
+			improved = check_total;
+		}
+	}
+
 }
 
 void Solution::print()
