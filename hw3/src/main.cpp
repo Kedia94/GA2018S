@@ -13,7 +13,9 @@
 
 #define REPEAT 1
 #define GEN_SIZE 1000
-#define MAX_GEN 1
+#define EXISTED_SIZE 900
+#define BEST_SIZE 10
+#define MAX_GEN 100
 #define MUTATE (1 << 8)
 
 #define PRINT_TIME
@@ -46,7 +48,6 @@ int main()
 	edge_iter = 0;
 
 	Graph graph(vertex);
-	std::cout<<"graph created"<<std::endl;
 	/* Add Graph Edge */
 	while (edge_iter < edge)
 	{
@@ -62,7 +63,6 @@ int main()
 		++edge_iter;
 	}
 	maxin.close();
-	std::cout<<"Edge Added"<<std::endl;
 
 	/* Part 0: Prepare for repeat running */
 	int max_list[REPEAT];
@@ -70,6 +70,7 @@ int main()
 
 	for (int repeats = 0; repeats < REPEAT; repeats++)
 	{
+//		std::cout<<"Repeat: "<<repeats<<std::endl;
 		/* Part 1: Generate 1st generation */
 
 		std::vector<Solution*> sol;
@@ -106,7 +107,10 @@ int main()
 			for (int j=0; j<vertex; ++j)
 				a[j] = rand()%2;
 
-			sol.push_back(new Solution(vertex, a));
+			Solution *temp_Sol = new Solution(vertex, a, &graph);
+			temp_Sol->getValue(&graph);
+			temp_Sol->localOptimize(&graph, vertex, edge, sigma, edgeSigma);
+			sol.push_back(temp_Sol);
 		}
 
 		int valueSum[MAX_VERTEX];
@@ -125,28 +129,44 @@ int main()
 			}
 			std::sort(sol.begin(), sol.end(), cmp);
 
-			for (int j=0; j<GEN_SIZE; ++j)
+			for (int j=0; j<BEST_SIZE; ++j)
+			{
+				now_sol.push_back(sol[j]);
+			}
+
+			for (int j=BEST_SIZE; j<EXISTED_SIZE; ++j)
 			{
 				/* select Parents */
-				sel1 = rand() % ((3+GEN_SIZE)/4);
+				sel1 = rand() % ((1+GEN_SIZE)/2);
 
-				sel2 = rand() % ((3+GEN_SIZE)/4);
+				sel2 = rand() % ((1+GEN_SIZE)/2);
 
 				/* Crossover */
 				for (int k=0; k<vertex; ++k)
 					a[k] = rand()%2;
-				Solution *temp_Sol = new Solution(vertex, sol[sel1], sol[sel2], a);
+				Solution *temp_Sol = new Solution(vertex, sol[sel1], sol[sel2], a, &graph);
 				temp_Sol->getValue(&graph);
-				now_sol.push_back(temp_Sol);
 				/* Mutate */
 				for (int k=0; k<vertex; ++k)
 				{
 					if (rand() % MUTATE == 0)
 					{
-						now_sol[j]->mutateKey(k, &graph);
-						now_sol[j]->flipKey(k);
+						temp_Sol->mutateKey(k, &graph);
+						temp_Sol->flipKey(k, &graph);
 					}
 				}
+				temp_Sol->localOptimize(&graph, vertex, edge, sigma, edgeSigma);
+				now_sol.push_back(temp_Sol);
+			}
+			for (int j=EXISTED_SIZE; j<GEN_SIZE; ++j)
+			{
+				for (int k=0; k<vertex; ++k)
+					a[k] = rand()%2;
+				Solution *temp_Sol = new Solution(vertex, a, &graph);
+				temp_Sol->getValue(&graph);
+				temp_Sol->localOptimize(&graph, vertex, edge, sigma, edgeSigma);
+				now_sol.push_back(temp_Sol);
+
 			}
 
 			max = INT_MIN;
@@ -170,42 +190,35 @@ int main()
 			max = max_new;
 			max_i = max_new_i;
 
-			for (int j=0; j<GEN_SIZE; ++j)
+			for (int j=BEST_SIZE; j<GEN_SIZE; ++j)
 			{
 				delete sol[j];
 			}
 			sol.clear();
 			sol.assign(now_sol.begin(), now_sol.end());
 #ifdef PRINT_TIME
-			//						std::cout<<average/(float)GEN_SIZE << " "<<first_max <<" " <<max_new<<std::endl;
-#endif
 			gettimeofday(&t2, NULL);
-			if (repeats == 0 && t2.tv_sec - t1.tv_sec > 90)
+//			std::cout<<average/(float)GEN_SIZE << " "<<(t2.tv_sec - t1.tv_sec) <<" secs "<<first_max <<" " <<max_new<<std::endl;
+#endif
+			if (repeats == 0 && t2.tv_sec - t1.tv_sec > 450)
 				i += MAX_GEN; 
-			std::cout<<i<<" / "<<MAX_GEN<<" : "<<(t2.tv_sec - t1.tv_sec) <<" secs"<<std::endl;
 		}
 
-		struct timeval tt1, tt2;
 		long _count = 0;
 		long total_sum = 0;
 		Solution *temp_sol;
-		gettimeofday(&tt1, NULL);
 		int max_index_s = INT_MIN;
 		int max_value_s = INT_MIN;
-for (int ii=0; ii<GEN_SIZE;++ii)
-{
-		sol[ii]->localOptimize(&graph, vertex, edge, sigma, edgeSigma);
-//		total_sum += sol[ii]->getValue(&graph);
-		if (max_value_s < sol[ii]->getValue(&graph))
+		for (int ii=0; ii<GEN_SIZE;++ii)
 		{
-			max_value_s = sol[ii]->getValue(&graph);
-			max_index_s = ii;
+			total_sum += sol[ii]->getValue(&graph);
+			if (max_value_s < sol[ii]->getValue(&graph))
+			{
+				max_value_s = sol[ii]->getValue(&graph);
+				max_index_s = ii;
+			}
+
 		}
-
-}
-		gettimeofday(&tt2, NULL);
-		std::cout<<"Local Spent: "<<((tt2.tv_sec-tt1.tv_sec)*1000 + (tt2.tv_usec-tt1.tv_usec)*0.001f) <<" msecs "<<_count<<", avg: "<<total_sum/GEN_SIZE<<std::endl;
-
 		temp_sol = sol[max_index_s];
 
 		int initial = 0;
@@ -231,7 +244,7 @@ for (int ii=0; ii<GEN_SIZE;++ii)
 		sol.clear();
 
 		gettimeofday(&t2, NULL);
-		if ((t2.tv_sec - t1.tv_sec) *(repeats+1) > 150 * repeats)
+		if ((t2.tv_sec - t1.tv_sec) *(repeats+2) > 450 * (repeats+1))
 			break;
 	}
 

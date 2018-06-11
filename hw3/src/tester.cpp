@@ -79,7 +79,7 @@ int main()
 
 	for (int i=0; i<GEN_SIZE; ++i)
 	{
-		sol.push_back(new Solution(vertex, a));
+		sol.push_back(new Solution(vertex, a, &graph));
 	}
 	maxout.close();
 

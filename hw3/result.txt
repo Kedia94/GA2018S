@@ -1,0 +1,4 @@
+Result: 2400
+Spent: 35874.6 msecs
+Result: 2406
+Spent: 35898.2 msecs

@@ -1,5 +1,6 @@
 #include "graph.h"
 #include <iostream>
+#include <string.h>
 
 Graph::Graph(int num): 
 _numVertex(num), _numEdge(0)
@@ -90,5 +91,5 @@ void Graph::shakeEdge(int *list)
 	{
 		tempEdge[i] = _edge[list[i]];
 	}
-	std::memcpy(_edge, tempEdge, MAX_EDGE * sizeof(struct edge));
+	memcpy(_edge, tempEdge, MAX_EDGE * sizeof(struct edge));
 }

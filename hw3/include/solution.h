@@ -11,15 +11,17 @@ private:
 	int _calculated;
 	int _recentChange;
 	int _recentChangeEdge;
+	int *_vertexValue;
+	void _calculateVertexChange(Graph *graph);
+	int _value;
 
 public:
-	int _value;
-	Solution(int size, int *array);
-	Solution(int size, Solution* sol1, Solution* sol2, int *randarray);
+	Solution(int size, int *array, Graph *graph);
+	Solution(int size, Solution* sol1, Solution* sol2, int *randarray, Graph *graph);
 	~Solution();
 	int isInclude(int key);
 	int mutateKey(int key, Graph* graph);
-	void flipKey(int key);
+	void flipKey(int key, Graph* graph);
 	int mutateEdge(int edgeNum, Graph* graph);
 	void flipEdge(int edgeNum, Graph* graph);
 	int getValue(Graph* graph);
